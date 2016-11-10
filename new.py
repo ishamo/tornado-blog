@@ -38,10 +38,10 @@ class Application(tornado.web.Application):
         ]
         settings = dict(
             blog_title=u"Sample Blog",
-            template_path=os.path.join(os.path.dirname(__file__), "template"),
+            template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             ui_modules={"Article": ArticleModule},
-            xsrf_cookies=True,
+            # xsrf_cookies=True, 为啥这个设置不了?
             cookie_secret="$2b$12$ggtyoLhkugxfy355uXv/eu",
             login_url="/auth/login",
             debug=True,
@@ -51,6 +51,7 @@ class Application(tornado.web.Application):
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
+        import pdb; pdb.set_trace()
         user = self.get_secure_cookie("blog_user")
         if not user: return None
         return session.query(User).filter_by(username=user).first()
@@ -61,7 +62,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class HomeHandler(BaseHandler):
     def get(self):
-        articles = session.query(Post).limit(5)
+        articles = session.query(Article).limit(5)
         if not articles:
             return self.redirect("/compose")
         self.render("home.html", articles=articles)
@@ -126,6 +127,7 @@ class AuthCreateHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
+        # import pdb; pdb.set_trace()
         username = self.get_argument("username")
         email = self.get_argument("email")
         hashed_password = yield executor.submit(
@@ -133,7 +135,7 @@ class AuthCreateHandler(BaseHandler):
             bcrypt.gensalt())
         user = User(username=username, email=email, password=hashed_password)
         session.add(user)
-        session.commit(user)
+        session.commit()
         self.set_secure_cookie("blog_user", str(username))
         self.redirect(self.get_argument("next", "/"))
 
@@ -141,7 +143,7 @@ class AuthCreateHandler(BaseHandler):
 class AuthLoginHandler(BaseHandler):
     def get(self):
         if not self.any_author_exists():
-            self.reirect("/auth/create")
+            self.redirect("/auth/create")
         else:
             self.render("login.html", error=None)
 
