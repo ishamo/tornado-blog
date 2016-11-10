@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<meta charset='UTF-8'>
+		<title>{{ escape(handler.settings["blog_title"]) }}</title>
+		<link rel="stylesheet" href="{{ static_url("bootstrap.css") }}" type="text/css">
+		<link rel="stylesheet" href="{{ static_url("blog.css") }}" type="text/css">
+		<link rel="alternate" href="/feed" type="application/atom+xml" title="{{ escape(handler.settings["blog_title"]) }}">
+		{% block head %}{% end %}
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-inverse" role="navigation">
+			<div class="navbar-header">
+				<a class="navbar-brand" href="/">博客</a>
+			</div>
+			<div>
+				<ul class="nav navbar-nav">
+					<li><a href="#">文章</a></li>
+					<li><a href="#">归档</a></li>
+					<li><a href="#">关于</a></li>
+				</ul>
+			</div>
+		</nav>
+		<div id="content">{% block body %}{% end %}</div>
+		<div id="bottom">{% block footer %}{% end %}</div>
+	</body>
+</html>

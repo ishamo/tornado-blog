@@ -1,0 +1,8 @@
+{% extends "base.html" %}
+
+{% block body %}
+	{% for article in articles %}
+		{% module Article(article) %}
+	{% end %}
+	<div><a href="/archive">{{ _("Archive") }}</a></div>
+{% end %}
