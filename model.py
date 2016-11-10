@@ -5,7 +5,7 @@ import sys
 from sqlalchemy import create_engine, func
 from sqlalchemy.orm import sessionmaker
 from sqlalchemy import Column, ForeignKey
-from sqlalchemy.types import String, Integer, BIGINT, TIMESTAMP, TEXT
+from sqlalchemy.types import String, Integer, INT, TIMESTAMP, TEXT
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.sql.expression import text
 
@@ -17,18 +17,19 @@ BaseModel = declarative_base()
 class User(BaseModel):
     __tablename__ = 'user'
 
-    id = Column(BIGINT, primary_key=True, autoincrement=True)
+    id = Column(INT, primary_key=True, autoincrement=True)
     username = Column(String(30), index=True, nullable=False)
     password = Column(String(30), nullable=False)
     email = Column(String(64), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, server_default=text('NOW()'), nullable=False)
     updated_at = Column(TIMESTAMP, onupdate=func.now(), nullable=False)
 
-class Post(BaseModel):
-    __tablename__ = 'post' 
+class Article(BaseModel):
+    __tablename__ = 'article' 
 
-    id = Column(BIGINT, primary_key=True)
+    id = Column(INT, primary_key=True)
     title = Column(String(64), nullable=False)
+    clazz = Column(String(64), nullable=False)
     content = Column(TEXT, nullable=False)
     created_at = Column(TIMESTAMP, server_default=text('NOW()'), nullable=False)
     updated_at = Column(TIMESTAMP, onupdate=func.now(), nullable=False)
