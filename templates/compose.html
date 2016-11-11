@@ -3,14 +3,10 @@
 {% block body %}
 <div class="center-block">
 	<form method="POST">
-		{% if article %}
-			<input type="text" class="form-control" value="{% raw article.title %}" name="title">
-		{% else %}
-			<input type="text" class="form-control" placeholder="标题" name="title">
-		{% end %}
+			<input type="text" class="form-control" value="{% raw article.title if article else ""%}" name="title">
 		<br /> <br />
 		<textarea class="form-control" rows="10" name="content">
-			{{ article.content }}
+			{% raw article.text if article else "" %}
 		</textarea>
 		<br /> <br />
 		<select class="form-control" name="clazz">

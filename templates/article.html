@@ -4,7 +4,7 @@
 	<h1>{% raw article.title %}</h1>
 	<br />
 	<br />
-	{% raw article.content %}
+	{% raw article.html %}
 	{% if current_user %}
 	  <a href="/compose?id={{ article.id }}">编辑</a>
 	{% end %}

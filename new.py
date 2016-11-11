@@ -101,18 +101,20 @@ class ComposeHandler(BaseHandler):
     def post(self):
         id = self.get_argument("id", None)
         title = tornado.escape.utf8(self.get_argument("title"))
-        content = tornado.escape.utf8(self.get_argument("content"))
+        text = tornado.escape.utf8(self.get_argument("content"))
+        html = markdown.markdown(text)
         clazz = tornado.escape.utf8(self.get_argument("clazz"))
         if id:
-            article = sessin.query(Article).filter_by(id=id).first()
+            article = session.query(Article).filter_by(id=id).first()
             if not article: raise tornado.web.HTTPError(404)
-            article.title=title
-            article.content=markdown.markdown(content)
-            article.clazz=clazz
+            article.title = title
+            article.html = html
+            article.text = text
+            article.clazz = clazz
             session.add(article)
             session.commit()
-            return self.redirect("/article/id")
-        article = Article(title=title, content=markdown.markdown(content),
+            return self.redirect("/article/%s" % id)
+        article = Article(title=title, text=text, html=html,
                           clazz=clazz, user_id=self.get_current_user().id)
         session.add(article)
         session.commit()
@@ -148,6 +150,7 @@ class AuthLoginHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
+        # import pdb; pdb.set_trace()
         username = tornado.escape.utf8(self.get_argument("username"))
         user = session.query(User).filter_by(username=username).first()
         if not user:

@@ -19,7 +19,7 @@ class User(BaseModel):
 
     id = Column(INT, primary_key=True, autoincrement=True)
     username = Column(String(30), index=True, nullable=False)
-    password = Column(String(30), nullable=False)
+    password = Column(String(64), nullable=False)
     email = Column(String(64), unique=True, nullable=False)
     created_at = Column(TIMESTAMP, default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now(), nullable=False)
@@ -30,8 +30,8 @@ class Article(BaseModel):
     id = Column(INT, primary_key=True)
     title = Column(String(64), nullable=False)
     clazz = Column(String(64), nullable=False)
-    markdown = Column(TEXT, nullable=False)   # markdown和html都有存, 这样好搞一点
-    html = Column(TEXT, nullable=False)
+    text = Column(TEXT, nullable=False)   # text是markdown格式的文本
+    html = Column(TEXT, nullable=False)   
     created_at = Column(TIMESTAMP, default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now(), nullable=False)
     user_id = Column(ForeignKey("user.id"), nullable=False)
