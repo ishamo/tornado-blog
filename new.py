@@ -38,7 +38,7 @@ class Application(tornado.web.Application):
         ]
         settings = dict(
             blog_title=u"Sample Blog",
-            template_path=os.path.join(os.path.dirname(__file__), "template"),
+            template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             ui_modules={"Article": ArticleModule},
             xsrf_cookies=True,
@@ -61,7 +61,7 @@ class BaseHandler(tornado.web.RequestHandler):
 
 class HomeHandler(BaseHandler):
     def get(self):
-        articles = session.query(Post).limit(5)
+        articles = session.query(Article).limit(5)
         if not articles:
             return self.redirect("/compose")
         self.render("home.html", articles=articles)
