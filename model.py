@@ -30,7 +30,8 @@ class Article(BaseModel):
     id = Column(INT, primary_key=True)
     title = Column(String(64), nullable=False)
     clazz = Column(String(64), nullable=False)
-    content = Column(TEXT, nullable=False)
+    markdown = Column(TEXT, nullable=False)   # markdown和html都有存, 这样好搞一点
+    html = Column(TEXT, nullable=False)
     created_at = Column(TIMESTAMP, default=func.now(), nullable=False)
     updated_at = Column(TIMESTAMP, default=func.now(), onupdate=func.now(), nullable=False)
     user_id = Column(ForeignKey("user.id"), nullable=False)
