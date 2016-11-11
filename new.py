@@ -151,7 +151,7 @@ class AuthLoginHandler(BaseHandler):
         username = tornado.escape.utf8(self.get_argument("username"))
         user = session.query(User).filter_by(username=username).first()
         if not user:
-            self.render("login.html", err="username is not exists")
+            self.render("login.html", error="username is not exists")
         hashed_password = yield executor.submit(
             bcrypt.hashpw, tornado.escape.utf8(self.get_argument("password")),
             tornado.escape.utf8(user.password))

@@ -1,8 +1,11 @@
 {% extends "base.html" %}
 
 {% block body %}
-	{{ article.title }}
+	<h1>{% raw article.title %}</h1>
 	<br />
 	<br />
-	{{ article.content }}
+	{% raw article.content %}
+	{% if current_user %}
+	  <a href="/compose?id={{ article.id }}">编辑</a>
+	{% end %}
 {% end %}
