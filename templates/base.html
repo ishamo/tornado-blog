@@ -10,18 +10,31 @@
 	</head>
 	<body>
 		<nav class="navbar navbar-default navbar-inverse" role="navigation">
-			<div class="navbar-header">
-				<a class="navbar-brand" href="/">博客</a>
+			<div class="container">
+			<div class="navbar-right">
+				{% if current_user %}
+					<ul class="nav navbar-nav">
+						<li><a href="/compose">login</a></li>
+						<li><a href="/auth/logout">login</a></li>
+					</ul>
+				{% else %}
+					<ul class="nav navbar-nav">
+						<li><a href="/auth/login">登录</a></li>
+						<li><a href="/auth/create">注册</a></li>
+					</ul>
+				{% end %}
+					<a class="navbar-brand" href="/">童年的时光机</a>
 			</div>
 			<div>
 				<ul class="nav navbar-nav">
 					<li><a href="#">文章</a></li>
-					<li><a href="#">归档</a></li>
-					<li><a href="#">关于</a></li>
+					<li><a href="/archive">归档</a></li>
+					<li><a href="/about">关于</a></li>
 				</ul>
 			</div>
+			</div>
 		</nav>
-		<div id="content">{% block body %}{% end %}</div>
+		<div class="container">{% block body %}{% end %}</div>
 		<div id="bottom">{% block footer %}{% end %}</div>
 	</body>
 </html>
