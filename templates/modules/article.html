@@ -1,0 +1,5 @@
+<a href=/compose?id={{ article.id }}><h1>{{ article.title }}</h1></a>
+	<br /> 
+	<div class="date">{{ locale.format_date(article.updated_at, full_format=True, shorter=True) }}</div>
+	<br /> <br />
+	<p>{{ article.content }}</p>

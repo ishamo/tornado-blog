@@ -51,7 +51,6 @@ class Application(tornado.web.Application):
 
 class BaseHandler(tornado.web.RequestHandler):
     def get_current_user(self):
-        import pdb; pdb.set_trace()
         user = self.get_secure_cookie("blog_user")
         if not user: return None
         return session.query(User).filter_by(username=user).first()
@@ -101,9 +100,9 @@ class ComposeHandler(BaseHandler):
     @tornado.web.authenticated
     def post(self):
         id = self.get_argument("id", None)
-        title = self.get_argument("title")
-        content = self.get_argument("content")
-        clazz = self.get_argument("clazz")
+        title = tornado.escape.utf8(self.get_argument("title"))
+        content = tornado.escape.utf8(self.get_argument("content"))
+        clazz = tornado.escape.utf8(self.get_argument("clazz"))
         if id:
             article = sessin.query(Article).filter_by(id=id).first()
             if not article: raise tornado.web.HTTPError(404)
@@ -114,11 +113,11 @@ class ComposeHandler(BaseHandler):
             session.commit()
             return self.redirect("/article/id")
         article = Article(title=title, content=markdown.markdown(content),
-                          clazz=clazz)
+                          clazz=clazz, user_id=self.get_current_user().id)
         session.add(article)
         session.commit()
         id = article.id
-        return self.redirect("/article/id")
+        return self.redirect("/article/%s" % article.id)
 
 
 class AuthCreateHandler(BaseHandler):
@@ -149,9 +148,13 @@ class AuthLoginHandler(BaseHandler):
 
     @gen.coroutine
     def post(self):
+        username = tornado.escape.utf8(self.get_argument("username"))
+        user = session.query(User).filter_by(username=username).first()
+        if not user:
+            self.render("login.html", err="username is not exists")
         hashed_password = yield executor.submit(
-            bcrypt.hashpw, tornado.escape.utf8(self.get-argument("password")),
-            tornado.escape.utf8(author.hashed_password))
+            bcrypt.hashpw, tornado.escape.utf8(self.get_argument("password")),
+            tornado.escape.utf8(user.password))
         if hashed_password == user.password:
             self.set_secure_cookie("blog_user", str(user.username))
             self.redirect(self.get_argument("next", "/"))
@@ -167,8 +170,7 @@ class AuthLogoutHandler(BaseHandler):
 
 class ArticleModule(tornado.web.UIModule):
     def render(self, article):
-        return self.render-string("modules/article.html", article=article)
-
+        return self.render_string("modules/article.html", article=article)
 
 
 if __name__ == "__main__":

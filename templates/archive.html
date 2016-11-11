@@ -2,6 +2,7 @@
 
 {% block body %}
 	{% for article in articles %}
-		{% module Article(article) %}
+		<a href="/article/{{ article.id }}"><h1> {{ article.title }} </h1></a>
+		<div class="date">{{ locale.format_date(article.updated_at, full_format=True, shorter=True) }}</div>
 	{% end %}
 {% end %}

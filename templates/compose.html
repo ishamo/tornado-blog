@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% block body %}
+<div class="center-block">
+	<form method="POST">
+		{% if article %}
+			<input type="text" class="form-control" value={{ article.title }} name="title">
+		{% else %}
+			<input type="text" class="form-control" placeholder="标题" name="title">
+		{% end %}
+		<br /> <br />
+		<textarea class="form-control" rows="10" name="content"></textarea>
+		<br /> <br />
+		<select class="form-control" name="clazz">
+			<option>笔记</option>
+			<option>随笔</option>
+			<option>编程</option>
+			<option>天空</option>
+			<option>日记</option>
+		</select>
+		<br /> <br />
+		<button type="button" class="btn btn-default">发表</button>
+		<input type="submit" value="发表">
+	</form>
+</div>
+
+{% end %}
