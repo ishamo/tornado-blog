@@ -41,7 +41,7 @@ class Application(tornado.web.Application):
             template_path=os.path.join(os.path.dirname(__file__), "templates"),
             static_path=os.path.join(os.path.dirname(__file__), "static"),
             ui_modules={"Article": ArticleModule},
-            # xsrf_cookies=True, 为啥这个设置不了?
+            xsrf_cookies=True, # 为啥这个设置不了?
             cookie_secret="$2b$12$ggtyoLhkugxfy355uXv/eu",
             login_url="/auth/login",
             debug=True,
